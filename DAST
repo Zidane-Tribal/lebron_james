@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone repository') {
+            steps {
+                git url: 'https://github.com/your-repo-url.git', branch: 'main'
+            }
+        }
+
+        stage('Static Code Analysis') {
+            steps {
+                // Optionally add static analysis tools here (e.g., SonarQube)
+                echo 'Static Code Analysis Step'
+            }
+        }
+
+        stage('Run OWASP ZAP Security Scan') {
+            steps {
+                script {
+                    // If OWASP ZAP is running as a Docker container:
+                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://10.0.2.4 -r zap_report.html'
+                    
+                    // If OWASP ZAP is installed locally:
+                    // sh '/path-to-zap/ZAP_Directory/zap.sh -daemon -port 8080'
+                    // sh 'zap-cli quick-scan http://10.0.2.4'
+                }
+            }
+        }
+
+        stage('Publish OWASP ZAP Report') {
+            steps {
+                publishHTML([
+                    reportName: 'OWASP ZAP Report',
+                    reportDir: '.',
+                    reportFiles: 'zap_report.html',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true
+                ])
+            }
+        }
+    }
+}
