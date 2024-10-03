@@ -12,8 +12,7 @@ pipeline {
         stage('Run OWASP ZAP Scan') {
             steps {
                 script {
-                    // If using Docker for OWASP ZAP
-                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://10.0.2.4 -r zap-report.html'
+
 
                     // If OWASP ZAP is installed locally, you can use:
                     // sh '/path/to/zap/zap.sh -daemon -port 8080'
