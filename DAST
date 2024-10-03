@@ -1,38 +1,34 @@
 pipeline {
-    agent any
+    agent any  // Executes the job on any available agent
+
     stages {
-        stage('Clone repository') {
+        stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/your-repo-url.git', branch: 'main'
+                // Replace this with your repository URL
+                git url: 'https://github.com/Zidane-Tribal/lebron_james'
             }
         }
 
-        stage('Static Code Analysis') {
-            steps {
-                // Optionally add static analysis tools here (e.g., SonarQube)
-                echo 'Static Code Analysis Step'
-            }
-        }
-
-        stage('Run OWASP ZAP Security Scan') {
+        stage('Run OWASP ZAP Scan') {
             steps {
                 script {
-                    // If OWASP ZAP is running as a Docker container:
-                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://10.0.2.4 -r zap_report.html'
-                    
-                    // If OWASP ZAP is installed locally:
-                    // sh '/path-to-zap/ZAP_Directory/zap.sh -daemon -port 8080'
+                    // If using Docker for OWASP ZAP
+                    sh 'docker run -t owasp/zap2docker-stable zap-baseline.py -t http://10.0.2.4 -r zap-report.html'
+
+                    // If OWASP ZAP is installed locally, you can use:
+                    // sh '/path/to/zap/zap.sh -daemon -port 8080'
                     // sh 'zap-cli quick-scan http://10.0.2.4'
                 }
             }
         }
 
-        stage('Publish OWASP ZAP Report') {
+        stage('Publish ZAP Report') {
             steps {
-                publishHTML([
+                // Publish the ZAP scan report in Jenkins
+                publishHTML([ 
                     reportName: 'OWASP ZAP Report',
                     reportDir: '.',
-                    reportFiles: 'zap_report.html',
+                    reportFiles: 'zap-report.html',
                     keepAll: true,
                     alwaysLinkToLastBuild: true
                 ])
