@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // Executes the job on any available agent
+    agent any // Executes the job on any available agent
 
     stages {
         stage('Clone Repository') {
@@ -12,8 +12,11 @@ pipeline {
         stage('Run OWASP ZAP Scan') {
             steps {
                 script {
-                    // If OWASP ZAP is installed locally, you can use:
-                    // sh '/path/to/zap/zap.sh -daemon -port 8080'
+                    // If OWASP ZAP is installed locally, you can use this:
+                    // Start ZAP in daemon mode with specified port
+                    sh '/path/to/zap/zap.sh -daemon -port 8080'
+
+                    // You can also run ZAP scan with zap-cli (if installed)
                     // sh 'zap-cli quick-scan http://10.0.2.4'
                 }
             }
