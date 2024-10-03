@@ -12,8 +12,6 @@ pipeline {
         stage('Run OWASP ZAP Scan') {
             steps {
                 script {
-
-
                     // If OWASP ZAP is installed locally, you can use:
                     // sh '/path/to/zap/zap.sh -daemon -port 8080'
                     // sh 'zap-cli quick-scan http://10.0.2.4'
